@@ -2,11 +2,14 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - applicationController
-  - applicationSetController
-  - argocd
-  - dexServer
-  - notificationsController
-  - redis
-  - repoServer
-  - server
+  - argoCDManifests/applicationController
+  - argoCDManifests/applicationSetController
+  - argoCDManifests/argocd
+  - argoCDManifests/dexServer
+  - argoCDManifests/notificationsController
+  - argoCDManifests/redis
+  - argoCDManifests/repoServer
+  - argoCDManifests/server
+
+  # Apps
+  - applications
