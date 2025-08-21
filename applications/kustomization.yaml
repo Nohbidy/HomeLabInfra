@@ -5,3 +5,4 @@ resources:
   - argocd.yaml
   - beszel.yaml
   - n8n.yaml
+  - prometheus.yaml
