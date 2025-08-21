@@ -64,7 +64,7 @@ spec:
             - name: LISTEN
               value: "45876"
             - name: HUB_URL
-              value: "0.0.0.0:8090"
+              value: "localhost:8090"
             - name: KEY
               valueFrom:
                 secretKeyRef:
