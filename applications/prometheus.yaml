@@ -13,9 +13,8 @@ spec:
       targetRevision: 27.31.0
       helm:
         valueFiles:
-          - $values/values.yaml
+          - $values/kustomize/prometheus/values.yaml
     - repoURL: https://github.com/Nohbidy/HomeLabInfra.git
-      path: kustomize/prometheus
       targetRevision: HEAD
       ref: values
   destination:
