@@ -15,5 +15,8 @@ spec:
     server: https://kubernetes.default.svc
     namespace: default
   syncPolicy:
+    managedNamespaceMetadata:
+      labels:
+        argocd.argoproj.io/managed-by: argocd
     syncOptions:
       - CreateNamespace=true
