@@ -5,3 +5,6 @@ namespace: default
 
 resources:
   - deployments.yaml
+
+patchesStrategicMerge:
+  - ../util/prometheus-pod-labels.yaml
