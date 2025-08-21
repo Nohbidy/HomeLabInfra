@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: n8n
+  namespace: default
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  labels:
+    name: n8n
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Nohbidy/HomeLabInfra.git
+    path: kustomize/n8n
+    targetRevision: HEAD
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
