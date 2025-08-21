@@ -3,8 +3,6 @@ kind: Application
 metadata:
   name: n8n
   namespace: default
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
   labels:
     name: n8n
 spec:

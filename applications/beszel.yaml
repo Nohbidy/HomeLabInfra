@@ -3,8 +3,6 @@ kind: Application
 metadata:
   name: beszel
   namespace: default
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
   labels:
     name: beszel
 spec:
