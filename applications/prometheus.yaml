@@ -1,5 +1,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
+metadata:
+  name: prometheus
+  namespace: argocd
+  labels:
+    name: prometheus
 spec:
   sources:
     - repoURL: 'https://prometheus-community.github.io/helm-charts'
@@ -12,3 +17,9 @@ spec:
       path: kustomize/prometheus
       targetRevision: HEAD
       ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
