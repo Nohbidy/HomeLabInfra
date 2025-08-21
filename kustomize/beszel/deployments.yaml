@@ -64,7 +64,10 @@ spec:
             - name: LISTEN
               value: "45876"
             - name: KEY
-              value: "YOUR-KEY-HERE"
+              valueFrom:
+                secretKeyRef:
+                  name: beszel-key
+                  key: key
           image: henrygd/beszel-agent:latest
           imagePullPolicy: Always
           name: beszel-agent

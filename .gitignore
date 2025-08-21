@@ -1,2 +1,7 @@
 .idea/
 *.iml
+
+**/*secret*.yaml
+
+*.env
+*.key
