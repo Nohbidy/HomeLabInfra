@@ -5,6 +5,7 @@ namespace: default
 
 resources:
   - n8nDeployment.yaml
+  - n8nService.yaml
   - postgres-claim0-persistentvolumeclaim.yaml
   - postgres-configmap.yaml
   - postgres-deployment.yaml
