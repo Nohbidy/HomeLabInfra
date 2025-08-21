@@ -10,6 +10,3 @@ resources:
   - argoCDManifests/redis
   - argoCDManifests/repoServer
   - argoCDManifests/server
-
-  # Apps
-  - applications
