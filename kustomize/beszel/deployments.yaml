@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: beszel
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: beszel
+  template:
+    metadata:
+      labels:
+        app: beszel
+    spec:
+      containers:
+        - name: beszel
+          image: henrygd/beszel:latest
+          ports:
+            - containerPort: 8090
+          volumeMounts:
+            - name: beszel-data
+              mountPath: /beszel_data
+            - name: beszel-socket
+              mountPath: /beszel_socket
+      volumes:
+        - name: beszel-data
+          hostPath:
+            path: /path/to/beszel_data
+            type: DirectoryOrCreate
+        - name: beszel-socket
+          hostPath:
+            path: /path/to/beszel_socket
+            type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: beszel
+spec:
+  selector:
+    app: beszel
+  ports:
+    - protocol: TCP
+      port: 8090
+      targetPort: 8090
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: beszel-agent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: beszel-agent
+  template:
+    metadata:
+      labels:
+        app: beszel-agent
+    spec:
+      hostNetwork: true
+      containers:
+        - name: beszel-agent
+          image: henrygd/beszel-agent:latest
+          env:
+            - name: LISTEN
+              value: /beszel_socket/beszel.sock
+            - name: HUB_URL
+              value: http://localhost:8090
+            - name: TOKEN
+              value: <token>
+            - name: KEY
+              value: "<key>"
+          volumeMounts:
+            - name: beszel-agent-data
+              mountPath: /var/lib/beszel-agent
+            - name: beszel-socket
+              mountPath: /beszel_socket
+            - name: docker-sock
+              mountPath: /var/run/docker.sock
+              readOnly: true
+      volumes:
+        - name: beszel-agent-data
+          hostPath:
+            path: /path/to/beszel_agent_data
+            type: DirectoryOrCreate
+        - name: beszel-socket
+          hostPath:
+            path: /path/to/beszel_socket
+            type: DirectoryOrCreate
+        - name: docker-sock
+          hostPath:
+            path: /var/run/docker.sock
+            type: Socket
