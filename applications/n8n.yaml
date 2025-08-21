@@ -13,10 +13,7 @@ spec:
     targetRevision: HEAD
   destination:
     server: https://kubernetes.default.svc
-    namespace: default
+    namespace: argocd
   syncPolicy:
-    managedNamespaceMetadata:
-      labels:
-        argocd.argoproj.io/managed-by: argocd
     syncOptions:
       - CreateNamespace=true
