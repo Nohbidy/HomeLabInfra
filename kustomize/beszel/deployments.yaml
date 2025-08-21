@@ -25,11 +25,11 @@ spec:
       volumes:
         - name: beszel-data
           hostPath:
-            path: /path/to/beszel_data
+            path: /beszel_data
             type: DirectoryOrCreate
         - name: beszel-socket
           hostPath:
-            path: /path/to/beszel_socket
+            path: /beszel_socket
             type: DirectoryOrCreate
 ---
 apiVersion: v1
@@ -45,11 +45,11 @@ spec:
       targetPort: 8090
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: DaemonSet
 metadata:
   name: beszel-agent
+  namespace: default
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: beszel-agent
@@ -60,35 +60,27 @@ spec:
     spec:
       hostNetwork: true
       containers:
-        - name: beszel-agent
-          image: henrygd/beszel-agent:latest
-          env:
+        - env:
             - name: LISTEN
-              value: /beszel_socket/beszel.sock
-            - name: HUB_URL
-              value: http://localhost:8090
-            - name: TOKEN
-              value: <token>
+              value: "45876"
             - name: KEY
-              value: "<key>"
-          volumeMounts:
-            - name: beszel-agent-data
-              mountPath: /var/lib/beszel-agent
-            - name: beszel-socket
-              mountPath: /beszel_socket
-            - name: docker-sock
-              mountPath: /var/run/docker.sock
-              readOnly: true
-      volumes:
-        - name: beszel-agent-data
-          hostPath:
-            path: /path/to/beszel_agent_data
-            type: DirectoryOrCreate
-        - name: beszel-socket
-          hostPath:
-            path: /path/to/beszel_socket
-            type: DirectoryOrCreate
-        - name: docker-sock
-          hostPath:
-            path: /var/run/docker.sock
-            type: Socket
+              value: "YOUR-KEY-HERE"
+          image: henrygd/beszel-agent:latest
+          imagePullPolicy: Always
+          name: beszel-agent
+          ports:
+            - containerPort: 45876
+              hostPort: 45876
+      restartPolicy: Always
+      tolerations:
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/master
+          operator: Exists
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/control-plane
+          operator: Exists
+  updateStrategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 100%
+    type: RollingUpdate
